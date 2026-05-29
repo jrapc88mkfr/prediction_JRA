@@ -3,12 +3,13 @@ async function main() {
 
     const pyodide = await loadPyodide();
 
-    // Pillow を追加
-    await pyodide.loadPackage(["micropip", "pillow"]);
+    // micropip
+    await pyodide.loadPackage("micropip");
 
-    // Pyxel
+    // Python側で pillow install
     await pyodide.runPythonAsync(`
 import micropip
+await micropip.install("pillow")
 await micropip.install("pyxel")
     `);
 
