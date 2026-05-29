@@ -1,2 +1,23 @@
-<script src="https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js"></script>
-<pyxel-run name="keiba_pyxel_ANT_json.py"></pyxel-run>
+<script type="module">
+async function main() {
+
+    const pyodide = await loadPyodide();
+
+    // Pillow を追加
+    await pyodide.loadPackage(["micropip", "pillow"]);
+
+    // Pyxel
+    await pyodide.runPythonAsync(`
+import micropip
+await micropip.install("pyxel")
+    `);
+
+    // 実行
+    await pyodide.runPythonAsync(`
+import pyxel.cli
+pyxel.cli.run_python_script("keiba_pyxel_ANT_json.py")
+    `);
+}
+
+main();
+</script>
