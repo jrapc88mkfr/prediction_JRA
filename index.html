@@ -1,24 +1,67 @@
-<script type="module">
-async function main() {
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>競馬Viewer</title>
 
+<style>
+body{
+    margin:0;
+    background:#111;
+    color:white;
+    font-family:sans-serif;
+    text-align:center;
+}
+
+#loading{
+    margin-top:20px;
+}
+</style>
+
+<!-- Pyodide -->
+<script src="https://cdn.jsdelivr.net/pyodide/v0.27.2/full/pyodide.js"></script>
+
+<!-- Pyxel -->
+<script src="https://cdn.jsdelivr.net/gh/kitao/pyxel/wasm/pyxel.js"></script>
+
+</head>
+
+<body>
+
+<div id="loading">
+Loading...
+</div>
+
+<script type="module">
+
+async function start(){
+
+    // Pyodide開始
     const pyodide = await loadPyodide();
 
     // micropip
     await pyodide.loadPackage("micropip");
 
-    // Python側で pillow install
+    // Pillow導入
     await pyodide.runPythonAsync(`
 import micropip
 await micropip.install("pillow")
-await micropip.install("pyxel")
-    `);
+`);
 
-    // 実行
-    await pyodide.runPythonAsync(`
-import pyxel.cli
-pyxel.cli.run_python_script("keiba_pyxel_ANT_json.py")
-    `);
+    // ローディング消す
+    document.getElementById("loading").style.display="none";
+
+    // Pyxel起動
+    const app = document.createElement("pyxel-run");
+    app.setAttribute("name","keiba_pyxel_ANT_json.py");
+    document.body.appendChild(app);
 }
 
-main();
+start();
+
 </script>
+
+</body>
+</html>
+```
