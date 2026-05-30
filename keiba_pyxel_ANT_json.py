@@ -220,7 +220,7 @@ def scan_data_dir(data_dir: str):
     # ========================================================
     if IS_WEB:
         try:
-            with urllib.request.urlopen("DATA/index.json") as f:
+            with urllib.request.urlopen("./DATA/index.json") as f:
                 names = json.loads(
                     f.read().decode("utf-8")
                 )
