@@ -494,36 +494,28 @@ class KeibaApp:
     # UPDATE
     # ==========================================================
     def update(self):
-        mx, my = pyxel.mouse_x, pyxel.mouse_y
-        wh     = pyxel.mouse_wheel
+    mx, my = pyxel.mouse_x, pyxel.mouse_y
+    wh     = pyxel.mouse_wheel
 
-        if pyxel.btnp(pyxel.KEY_Q):
-            pyxel.quit()
+    if pyxel.btnp(pyxel.KEY_Q):
+        pyxel.quit()
 
-        # DEBUG
+    # index.json 待ち
+    if self.scene == SCENE_LOADING:
+        self._upd_loading()
+        return
+
+    # race.json 読み込み待ち（ポーリングしつつ待機）
+    if self._race_loader.is_loading() or self._pending_file is not None:
         self._poll_race_loader()
+        return
 
-        self.err_msg = (
-            f"state={self._race_loader.state} "
-            f"err={self._race_loader.error}"
-        )
-
-        # ---- ローディング中のポーリング ----
-        if self.scene == SCENE_LOADING:
-            self._upd_loading()
-            return
-
-        # ---- race.json ロード待ち ----
-        if self._race_loader.is_loading():
-            return
-
-        if self.scene == SCENE_FILE:
-            self._upd_file(mx, my, wh)
-        elif self.scene == SCENE_LIST:
-            self._upd_list(mx, my, wh)
-        elif self.scene == SCENE_DETAIL:
-            self._upd_detail(mx, my, wh)
-
+    if self.scene == SCENE_FILE:
+        self._upd_file(mx, my, wh)
+    elif self.scene == SCENE_LIST:
+        self._upd_list(mx, my, wh)
+    elif self.scene == SCENE_DETAIL:
+        self._upd_detail(mx, my, wh)
     # ---- index.json ポーリング ------------------------------
     def _upd_loading(self):
         self._dot_frame = (self._dot_frame + 1) % (FPS * 3)
