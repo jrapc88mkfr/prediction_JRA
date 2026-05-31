@@ -258,6 +258,7 @@ class _AsyncLoader:
                 self.state = self.STATE_DONE
 
             def on_error(err):
+                raise Exception(str(err))
                 self.error = f"{type(err)} : {err}"
                 self.state = self.STATE_ERROR
 
